@@ -53,7 +53,7 @@
 
             <div class="container mt-5">
               
-                <button class="btn btn-outline-secondary" type="button" id="newProductButton" >Enter New Product</button>
+                <button data-toggle="modal" data-target="#modal" class="btn btn-outline-secondary" type="button" id="newProductButton" >Enter New Product</button>
                 <button class="btn btn-outline-secondary" type="button" id="submitButton" >Submit Products</button>
                 
                 
@@ -78,7 +78,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header pl-4">
-            <h5 class="modal-title " id="modalLabel">Your Cart is Empty</h5>
+            <h5 class="modal-title " id="modalLabel">Enter New Product Details</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -92,7 +92,7 @@
           
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-           <button type="button" id="clearCartButton" class="btn btn-danger">Clear Cart</button> 
+           <button type="button" id="addItemButton" class="btn btn-success">Add</button> 
           </div>
         </div>
       </div>
