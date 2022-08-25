@@ -3,7 +3,7 @@ const getProducts = async () => {
 headers: {
 "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE0MzgwMjAsImV4cCI6MTY2MjY0NzYyMH0.FxXNN1ADQHPQJbchifn_vi_cp1sdPcdONESnfaMV4DE"
 }
-}).then(response => )
+}).then(response => console.log(response))
 }
 window.onload = () => {
     getProducts();
