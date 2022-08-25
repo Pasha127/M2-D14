@@ -111,18 +111,18 @@ let data = [];
     //    
     //}
     const addToList = (e) => {
-        
+
     }
-    //const clearCart = () =>{
-    //    resetBoard();
-    //    cartArr=[];
-    //   
-    //    modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
-    //
-    //    for(card of modalBody.querySelectorAll("*")){
-    //        card.remove();
-    //    }
-    //}
+    const clearCart = () =>{
+        resetBoard();
+        cartArr=[];
+       
+        modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
+    
+        for(card of modalBody.querySelectorAll("*")){
+            card.remove();
+        }
+    }
     const deleteCard = (e) => {
         e.target.closest("div.col-md-4").remove();
     }

@@ -54,7 +54,7 @@
             <div class="container mt-5">
               
                 <button data-toggle="modal" data-target="#modal" class="btn btn-outline-secondary" type="button" id="newProductButton" >Enter New Product</button>
-                <button class="btn btn-outline-secondary" type="button" id="submitButton" >Submit Products</button>
+                <button class="btn btn-outline-secondary" type="button" id="submitButton" >Submit All Products</button>
                 
                 
               </div>
@@ -90,15 +90,15 @@
                   "brand": "nokia", //REQUIRED
                   "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
                   "price": 100, //REQUIRED -->
-                  <input class="form-control mb-2" type="text" placeholder="Name">
-                  <input class="form-control mb-2" type="text" placeholder="Description">
-                  <input class="form-control mb-2" type="text" placeholder="Brand">
-                  <input class="form-control mb-2" type="text" placeholder="Image URL">
+                  <input id="inputName" class="form-control mb-2" type="text" placeholder="Name">
+                  <input id="inputDescription" class="form-control mb-2" type="text" placeholder="Description">
+                  <input id="inputBrand" class="form-control mb-2" type="text" placeholder="Brand">
+                  <input id="inputImg" class="form-control mb-2" type="text" placeholder="Image URL">
                   <div class="input-group mb-2 pb-2">
                     <div class="input-group-prepend">
                       <div class="input-group-text">$</div>
                     </div>
-                    <input class="form-control " type="text" placeholder="Price">
+                    <input id="inputPrice" class="form-control " type="text" placeholder="Price">
 
                   </div>
 
@@ -108,7 +108,7 @@
           
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-           <button type="button" id="addItemButton" class="btn btn-success">Add</button> 
+           <button type="button" id="addItemButton" data-dismiss="modal" class="btn btn-success">Add</button> 
           </div>
         </div>
       </div>

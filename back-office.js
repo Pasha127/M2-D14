@@ -1,23 +1,26 @@
-const searchField = document.querySelector("#searchField");
-const searchButton = document.querySelector("#searchButton");
-const userInput = document.querySelector("#userInput");
-const inputPassword = document.querySelector("#inputPassword");
-const enrollBtn = document.querySelector("#enrollBtn");
+
 const cardZone = document.querySelector("div.album.py-5.bg-light");
 const modal = document.querySelector("#modal");
 const modalBody = document.querySelector("#modal div.modal-body .row");
 const cardContainerRow = cardZone.querySelector("div.row");
 const viewCartButton = document.querySelector("#viewCartButton");
-const addItemButton = document.querySelector("#addItemButton");
+const addItemBtn = document.querySelector("#addItemButton");
 const header = document.querySelector("nav");
 const logInBtn = document.querySelector("#logInButton");
+const subAllBtn = document.querySelector("#submitButton");
+const inputName = document.querySelector('#inputName');
+const inputDescription = document.querySelector('#inputDescription');
+const inputBrand = document.querySelector('#inputBrand');
+const inputImg = document.querySelector('#inputImg');
+const inputPrice = document.querySelector('#inputPrice'); 
 let searchResultArr = []; 
-let cartArr = [];
-let catalog = {};
+let productsArr = [];
+let newItem = {};
 let data = [];
 
 
-const  loadDefaultProducts = async () => {
+
+    const  loadDefaultProducts = async () => {
     try{        
         const response = 
         await fetch("https://striveschool-api.herokuapp.com/api/product/", {
@@ -30,32 +33,18 @@ const  loadDefaultProducts = async () => {
         
         
     }
-    //const  loadDefaultProducts = async () => {
-    //    try{
-    //        const response = await fetch("https://striveschool-api.herokuapp.com/books");
-    //        catalog = await response.json();
-    //        makeCards(cardContainerRow, catalog);
-    //        return catalog;
-    //    }
-    //    catch(err){console.log(err)};
-    //    console.log(catalog);
-    //};
-    const searchCatalog = () => {
-        searchResultArr = [];
-        console.log(query);
-        modal.querySelector("div.modal-header").innerText  = `Search: "${query}"`;
-        //modal.querySelector(".modal-body img").setAttribute("src", catalog[0].img) ;
-        for(let i=0; i<catalog.length; i++){
-            //console.log(catalog[i].title.toLowerCase().includes(query.toLowerCase()));
-            if(catalog[i].title.toLowerCase().includes(query.toLowerCase())){
-                searchResultArr.push(catalog[i]);
-                
-            }
-        }
-        console.log(searchResultArr);
-        makeCards(modalBody, searchResultArr);    
+    const submitProduct = (e) =>{
+
+        
+            e.target.closest("div.col-md-4").remove();
+            createAlert("Submitted Item", "success");
         
     }
+    const submitAll = ()=>{
+        const activeCards = document.querySelectorAll("div.col-md-4");
+        activeCards.forEach(element => {element.remove()});
+        createAlert(`Submitted ${activeCards.length} Items`, "success" );        
+    } 
     
     
     const changeDisplayed = () => {
@@ -84,56 +73,33 @@ const  loadDefaultProducts = async () => {
         };
         makeCards(cardContainerRow, catalog);
     }
-    const showCart = () => {
-        if(cartArr.length === 1){
-            modal.querySelector("div.modal-header").innerText  = `Your Cart has 1 item.`;
-        }else{    
-            modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
-        }   
-    
-        
-        for(card of modalBody.querySelectorAll("*")){
-            card.remove();
-        }
-        cartArr.forEach(element => {
-            const newP = document.createElement('p') 
-            newP.innerText = element;
-            modalBody.append(newP);
-        })   
-    }
-    
-    const addToCart = (e) => {    
-        const addedProduct = catalog.filter(element => element.title === e.target.closest(".card").querySelector(".card-text").innerText);
-        cartArr.push(addedProduct[0].title);
-        e.target.closest(".card").classList.add("selcted4Cart");
-    
-        
-    }
-    const clearCart = () =>{
-        resetBoard();
-        cartArr=[];
-       
-        modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
-    
-        for(card of modalBody.querySelectorAll("*")){
-            card.remove();
-        }
-    }
+   
     const skip = (e) => {
         e.target.closest("div.col-md-4").remove();
+        createAlert("Deleted Item", "danger");
     }
     
-    const makeCards = (where, array1) => {
-        array1.forEach(element => {
+    const addItem = () => {
+        newItem.name=inputName.value
+        newItem.description=inputDescription.value
+        newItem.brand=inputBrand.value
+        newItem.imageUrl=inputImg.value
+        newItem.price=inputPrice.value
+
+        makeCards(cardContainerRow, newItem);
+    }
+
+    const makeCards = (where, obj) => {     
             
             const newCard = document.createElement("div");
             newCard.innerHTML = `<div class="col-md-4">
             <div class="card mb-4 shadow-sm" style="width: 220px;">
             <img class="card-img-top"
-            src="${element.img}">
+            src="${obj.imageUrl}">
             <div class="card-body">
             <p class="card-text">
-            ${element.title}
+            ${obj.name} - ${obj.brand}<br>
+            ${obj.description}
             </p>
             <div
             class="d-flex justify-content-between align-items-center"
@@ -143,41 +109,35 @@ const  loadDefaultProducts = async () => {
             type="button"
             class="btn btn-sm btn-outline-secondary skipBtn"
             >
-            Skip
+            Delete
             </button>
             <button
             type="button"
-            class="btn btn-sm btn-outline-secondary addCart"
+            class="btn btn-sm btn-outline-secondary submitProduct"
             >
-            Add to Cart
+            Submit
             </button>
             </div>
-           
+            <small class="text-muted">${'$'+obj.price}</small>
             </div>
             </div>
             </div>
             </div>`
             where.append(newCard);
-        });
-        const cartBtns = document.querySelectorAll(".addCart");
-        const skipBtns = document.querySelectorAll(".skipBtn");
-        cartBtns.forEach(btn => btn.addEventListener("click", addToCart));
-        skipBtns.forEach(btn => btn.addEventListener("click", skip));
+            createAlert(`Added ${obj.brand} ${obj.name}`,"success");
+        
+        const subBtn = newCard.querySelector(".submitProduct");
+        const skipBtn = newCard.querySelector(".skipBtn");
+        subBtn.addEventListener("click", submitProduct);
+        skipBtn.addEventListener("click", skip);
     }
-    const enroll = () => {
-        if(userInput.value === "admin" && inputPassword.value === "password"){
-            document.location.href = "back-office.html";
-        }else{
-            createAlert("Invalid Login or Password");
-            userInput.classList.add("is-invalid");
-            inputPassword.classList.add("is-invalid");
-        }
-}
-const createAlert = (string) => {
+    
+
+const createAlert = (string,color) => {
     const alertContainer = document.createElement("div");
     alertContainer.setAttribute("class", "container d-flex justify-content-center");
     const alertBody = document.createElement("div");
-    alertBody.setAttribute("class", "alert alert-danger alertBar");
+    alertBody.setAttribute("class", `alert alert-${color} alertBar`);
     alertBody.setAttribute("role", "alert");
     header.after(alertContainer);
     alertContainer.append(alertBody);
@@ -185,23 +145,11 @@ const createAlert = (string) => {
     setTimeout(function () {alertContainer.remove()}, 5000)
 
 }
-const clearInputFields = () => {
-    userInput.classList.remove("is-invalid");
-            inputPassword.classList.remove("is-invalid");
-}
 
-window.onload = () => {
-    
-    loadDefaultProducts();    
-    searchField.addEventListener("keydown", changeDisplayed)
-    searchButton.addEventListener("click", resetBoard);
-    viewCartButton.addEventListener("click", showCart);
-    clearCartButton.addEventListener("click", clearCart);
-    enrollBtn.addEventListener("click", enroll);
-    logInBtn.addEventListener("click", clearInputFields);
 
-    
-    
+window.onload = () => {  
+    addItemBtn.addEventListener("click", addItem);   
+    subAllBtn.addEventListener("click", submitAll);   
 };
 
 //product model full
@@ -231,7 +179,49 @@ window.onload = () => {
 
 
 
-
+//const  loadDefaultProducts = async () => {
+    //    try{
+    //        const response = await fetch("https://striveschool-api.herokuapp.com/books");
+    //        catalog = await response.json();
+    //        makeCards(cardContainerRow, catalog);
+    //        return catalog;
+    //    }
+    //    catch(err){console.log(err)};
+    //    console.log(catalog);
+    //};
+    //const searchCatalog = () => {
+    //    searchResultArr = [];
+    //    console.log(query);
+    //    modal.querySelector("div.modal-header").innerText  = `Search: "${query}"`;
+    //    //modal.querySelector(".modal-body img").setAttribute("src", catalog[0].img) ;
+    //    for(let i=0; i<catalog.length; i++){
+    //        //console.log(catalog[i].title.toLowerCase().includes(query.toLowerCase()));
+    //        if(catalog[i].title.toLowerCase().includes(query.toLowerCase())){
+    //            searchResultArr.push(catalog[i]);
+    //            
+    //        }
+    //    }
+    //    console.log(searchResultArr);
+    //    makeCards(modalBody, searchResultArr);    
+    //    
+    //}
+    //const showCart = () => {
+    //    if(cartArr.length === 1){
+    //        modal.querySelector("div.modal-header").innerText  = `Your Cart has 1 item.`;
+    //    }else{    
+    //        modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
+    //    }   
+    //
+    //    
+    //    for(card of modalBody.querySelectorAll("*")){
+    //        card.remove();
+    //    }
+    //    cartArr.forEach(element => {
+    //        const newP = document.createElement('p') 
+    //        newP.innerText = element;
+    //        modalBody.append(newP);
+    //    })   
+    //}
 
 
 
