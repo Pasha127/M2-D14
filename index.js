@@ -16,7 +16,7 @@ let searchResultArr = [];
 let cartArr = [];
 let catalog = {};
 let data = [];
-
+const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://www.lidl.cz/assets/gcpe355e6bee3e244afab6d2b4d4933e5d6.jpeg',price:100};
 
 //const  loadDefaultProducts = async () => {
 //    try{        
@@ -85,34 +85,32 @@ let data = [];
         };
         makeCards(cardContainerRow, catalog);
     }
-    //const showCart = () => {
-    //    if(cartArr.length === 1){
-    //        modal.querySelector("div.modal-header").innerText  = `Your Cart has 1 item.`;
-    //    }else{    
-    //        modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
-    //    }   
-    //
-    //    
-    //    for(card of modalBody.querySelectorAll("*")){
-    //        card.remove();
-    //    }
-    //    cartArr.forEach(element => {
-    //        const newP = document.createElement('p') 
-    //        newP.innerText = element;
-    //        modalBody.append(newP);
-    //    })   
-    //}
+    const showCart = () => {
+        if(cartArr.length === 1){
+            modal.querySelector("div.modal-header").innerText  = `Your Cart has 1 item.`;
+        }else{    
+            modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
+        }   
     
-    //const addToList = (e) => {    
-    //    const addedProduct = catalog.filter(element => element.title === e.target.closest(".card").querySelector(".card-text").innerText);
-    //    cartArr.push(addedProduct[0].title);
-    //    e.target.closest(".card").classList.add("selcted4Cart");
-    //
-    //    
-    //}
-    const addToList = (e) => {
-
+        
+        for(card of modalBody.querySelectorAll("*")){
+            card.remove();
+        }
+        cartArr.forEach(element => {
+            const newP = document.createElement('p') 
+            newP.innerText = element;
+            modalBody.append(newP);
+        })   
     }
+    
+    const addToList = (e) => {    
+        const addedProduct = catalog.filter(element => element.title === e.target.closest(".card").querySelector(".card-text").innerText);
+        cartArr.push(addedProduct[0].title);
+        e.target.closest(".card").classList.add("selcted4Cart");
+    
+        
+    }
+    
     const clearCart = () =>{
         resetBoard();
         cartArr=[];
@@ -123,32 +121,36 @@ let data = [];
             card.remove();
         }
     }
-    const deleteCard = (e) => {
-        e.target.closest("div.col-md-4").remove();
+    const detailPage = (e)=>{
+        const selectedCard = e.target.closest("div.col-md-4");
+        //savedata of card for detail page
+        document.location.href = "details.html";
+
     }
     
     const makeCards = (where, array1) => {
-        array1.forEach(element => {
-            
+        for(let i=0;i<array1.length;i++){
+            const obj = array1[i];
             const newCard = document.createElement("div");
             newCard.innerHTML = `<div class="col-md-4">
             <div class="card mb-4 shadow-sm" style="width: 220px;">
             <img class="card-img-top"
-            src="${element.img}">
+            src="${obj.imageUrl}">
             <div class="card-body">
             <p class="card-text">
-            ${element.title}
+            ${obj.name} - ${obj.brand}<br>
+            ${obj.description}
             </p>
             <div
             class="d-flex justify-content-between align-items-center"
             >
             <div class="btn-group">
-            <button
-            type="button"
-            class="btn btn-sm btn-outline-secondary skipBtn"
+            <a
+            type="button" href=details.html?name=${obj.name}&brand=${obj.brand}&description=${obj.description}&price=${obj.price}&imageUrl=${obj.imageUrl}
+            class="btn btn-sm btn-outline-secondary detailBtn"
             >
-            Skip
-            </button>
+            Details
+            </a>
             <button
             type="button"
             class="btn btn-sm btn-outline-secondary addCart"
@@ -156,32 +158,34 @@ let data = [];
             Add to Cart
             </button>
             </div>
-           
+            <small class="text-muted">${'$'+obj.price}</small>
             </div>
             </div>
             </div>
-            </div>`
+            </div>`;
             where.append(newCard);
-        });
+        };
         const cartBtns = document.querySelectorAll(".addCart");
-        const skipBtns = document.querySelectorAll(".skipBtn");
+        const detailBtns = document.querySelectorAll(".detailBtn");
         cartBtns.forEach(btn => btn.addEventListener("click", addToList));
-        skipBtns.forEach(btn => btn.addEventListener("click", deleteCard));
+        detailBtns.forEach(btn => btn.addEventListener("click", detailPage));
     }
     const enroll = () => {
         if(userInput.value === "admin" && inputPassword.value === "password"){
             document.location.href = "back-office.html";
         }else{
-            createAlert("Invalid Login or Password");
+            createAlert("Invalid Login or Password","danger");
             userInput.classList.add("is-invalid");
             inputPassword.classList.add("is-invalid");
         }
 }
-const createAlert = (string) => {
+const createAlert = (string,color) => {
+    const previousAlerts = document.querySelectorAll(".alertBar");
+    for(bar of previousAlerts){bar.remove()};
     const alertContainer = document.createElement("div");
     alertContainer.setAttribute("class", "container d-flex justify-content-center");
     const alertBody = document.createElement("div");
-    alertBody.setAttribute("class", "alert alert-danger alertBar");
+    alertBody.setAttribute("class", `alert alert-${color} alertBar`);
     alertBody.setAttribute("role", "alert");
     header.after(alertContainer);
     alertContainer.append(alertBody);

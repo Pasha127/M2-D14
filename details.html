@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Jekyll v3.8.5" />
+    <title>CRUDazon</title>
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/4.3/examples/album/"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+      integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./styles.css"/>
+    
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex" style="justify-content: space-between;">
+        <a class="navbar-brand" href="./index.html"><img  src="./CRUDazon_logo.svg" style="width: 100px;"></a>
+        
+      
+        <div class="  ml-auto d-flex justify-content-end" id="navbarSupportedContent">          
+          <div class="my-2 my-lg-0">
+            <button data-toggle="modal" data-target="#modal" class="btn btn-outline-secondary" type="button" id="viewCartButton" >View Cart</button>           
+            <button data-toggle="modal" data-target="#logInModal" class="btn btn-outline-secondary" type="button" id="logInButton" >Log In</button> 
+          </div>
+        </div>
+      </nav>
+
+
+    <main role="main">     
+
+      <div class="container d-flex justify-content-center">
+        <h1 class="jumbotron-heading ">Details:</h1>
+
+      </div>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row d-flex justify-content-center">
+
+            <div class="col-md-4">
+                
+         
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header pl-4">
+            <h5 class="modal-title " id="modalLabel">Your Cart is Empty</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div >
+          <div class="modal-body">
+            <div class="row d-flex justify-content-center flex-column pl-4">
+
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="button" id="clearCartButton" class="btn btn-danger">Clear Cart</button> 
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="logInModal" tabindex="-1" aria-labelledby="logInModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header pl-4">
+            <h5 class="modal-title " id="logInModalLabel">Admin Log In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+        </div >
+        <div class="modal-body">
+            <div class="row d-flex justify-content-center flex-column pl-4">
+                <form class="mr-4">
+                    <div class="form-group">
+                      <label for="userInput">Username</label>
+                      <input id="userInput" class="form-control " type="text" placeholder="Username">
+                      <small id="inputHelp" class="form-text text-muted mt-0 mb-2">The username is "admin".</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                        <small id="passwordHelp" class="form-text text-muted">The password is "password".</small>
+                    </div>
+                </form>
+                
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+              <button type="submit" id="enrollBtn" data-dismiss="logInModal" class="btn btn-primary">Log In</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>           
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+        </p>
+        <div>
+          <p>If you liked what you found,  spread it around!</p>
+          <i class="fab fa-facebook-f"></i>
+          <i class="fab fa-twitter"></i>
+          <i class="fab fa-instagram"></i>
+          <i class="fab fa-pinterest"></i>
+        </div>
+      </div>
+    </footer>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./details.js"></script>
+  </body>
+</html>

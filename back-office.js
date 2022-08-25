@@ -134,6 +134,8 @@ let data = [];
     
 
 const createAlert = (string,color) => {
+    const previousAlerts = document.querySelectorAll(".alertBar");
+    for(bar of previousAlerts){bar.remove()};
     const alertContainer = document.createElement("div");
     alertContainer.setAttribute("class", "container d-flex justify-content-center");
     const alertBody = document.createElement("div");
