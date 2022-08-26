@@ -44,7 +44,7 @@ let data = [];
     }
     const submitProduct = async (input) =>{
         console.log(input);
-        if(input.target){const card = input.target.closest(".col-md-4");}
+        if(awaitinput.target){const card = input.target.closest(".col-md-4");}
         else{const card = input;}        ;  
         const postObj = {name:`${card.querySelector("span.productName").innerText}`,brand:`${card.querySelector("span.productBrand").innerText}`,description:`${card.querySelector("span.productDescription").innerText}`,imageUrl:`${card.querySelector(".card-img-top").getAttribute("src")}`,price:`${card.querySelector("span.productPrice").innerText}`};
         fetch(`https://striveschool-api.herokuapp.com/api/product/`, {
