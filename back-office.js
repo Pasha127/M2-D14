@@ -20,6 +20,7 @@ const modifyInventoryBtn =  document.querySelector('#modifyInventoryButton');
 const enterANewProductBtn =  document.querySelector('#enterANewProductButton');
 const editAProductBtn =  document.querySelector('#editAProductButton');
 const deleteAProductBtn =  document.querySelector('#deleteAProductButton');
+const inventory = document.querySelector('.inventory');
 
 let searchResultArr = []; 
 let productsArr = [];
@@ -113,13 +114,33 @@ let data = [];
 
     }
     const addOrEdit = ()=>{
+        eraseInventory();
         for(element of modalBody.querySelectorAll("input")){element.classList.add("d-none")};
         modalBody.querySelector(".input-group").classList.add("d-none");
         addItemBtn.classList.add("d-none");
         editItemBtn.classList.add("d-none");
+        deleteItemBtn.classList.add("d-none");
         enterANewProductBtn.classList.remove("d-none");
         editAProductBtn.classList.remove("d-none");
         deleteAProductBtn.classList.remove("d-none");
+        fetch("https://striveschool-api.herokuapp.com/api/product/", {
+            method: "GET",
+            headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE0MzgwMjAsImV4cCI6MTY2MjY0NzYyMH0.FxXNN1ADQHPQJbchifn_vi_cp1sdPcdONESnfaMV4DE"}})
+            .then(res => data=res.json()).then(data => showInventory(data))
+            .catch(err => console.log('post failed:', err));
+
+    }
+    const showInventory = (data)=>{
+        for(element of data){
+            const newLine = document.createElement("p");
+            newLine.innerText =`${element.name} - ID: ${element._id} `;
+            inventory.append(newLine);
+        } 
+    }
+    const eraseInventory = ()=>{
+        for(garbage of inventory.querySelectorAll("*")){
+            garbage.remove();
+        }
     }
     const inventoryActionChoice = (e) =>{
         inputId.value = "";      
@@ -140,6 +161,7 @@ let data = [];
                 inputBrand.classList.remove("d-none");     
                 inputImg.classList.remove("d-none");      
                 inputPrice.classList.remove("d-none");
+                modalBody.querySelector(".input-group").classList.remove("d-none");    
             break;
             case "Edit A Product": 
                 editItemBtn.classList.remove("d-none");
@@ -148,7 +170,8 @@ let data = [];
                 inputDescription.classList.remove("d-none");
                 inputBrand.classList.remove("d-none");     
                 inputImg.classList.remove("d-none");      
-                inputPrice.classList.remove("d-none");    
+                inputPrice.classList.remove("d-none");
+                modalBody.querySelector(".input-group").classList.remove("d-none");    
             break;
             case "Delete A Product":
                 deleteItemBtn.classList.remove("d-none");
