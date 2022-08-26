@@ -35,7 +35,7 @@ let data = [];
     }
     const submitProduct = (e) =>{
         const card = e.target.closest(".col-md-4");
-        const postObj = {name:'${card.querySelector("span.productName").innerText}',brand:`${card.querySelector("span.productBrand").innerText}`,description:`${card.querySelector("span.productDescription").innerText}`,imageUrl:`${card.querySelector(".card-img-top").getAttribute("src")}`,price:`${card.querySelector("span.productPrice").innerText}`};
+        const postObj = {name:`${card.querySelector("span.productName").innerText}`,brand:`${card.querySelector("span.productBrand").innerText}`,description:`${card.querySelector("span.productDescription").innerText}`,imageUrl:`${card.querySelector(".card-img-top").getAttribute("src")}`,price:`${card.querySelector("span.productPrice").innerText}`};
         fetch("https://striveschool-api.herokuapp.com/api/product/", {
             method: "POST",
             headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE0MzgwMjAsImV4cCI6MTY2MjY0NzYyMH0.FxXNN1ADQHPQJbchifn_vi_cp1sdPcdONESnfaMV4DE"}, 
@@ -128,7 +128,7 @@ let data = [];
             Submit
             </button>
             </div>
-            <small class="text-muted"$> <span class="productPrice">${obj.price}</span></small>
+            <small class="text-muted">$<span class="productPrice">${obj.price}</span></small>
             </div>
             </div>
             </div>

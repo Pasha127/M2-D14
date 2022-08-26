@@ -58,6 +58,7 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
 //        
 //    }
     const loadData = async ()=>{
+        
         let dataArr = [];
         fetch("https://striveschool-api.herokuapp.com/api/product/", {
             method: "GET",
@@ -98,6 +99,7 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
         makeCards(cardContainerRow, catalog);
     }
     const showCart = () => {
+        if(sessionStorage.cart.length>0){cartArr = sessionStorage.cart.split(",");}
         if(cartArr.length === 1){
             modal.querySelector("div.modal-header").innerText  = `Your Cart has 1 item.`;
         }else{    
@@ -115,17 +117,21 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
         })   
     }
     
-    const addToList = (e) => {    
-        const addedProduct = catalog.filter(element => element.title === e.target.closest(".card").querySelector(".card-text").innerText);
-        cartArr.push(addedProduct[0].title);
+    
+    const addToCart = (e) => {    
+        const addedProduct = e.target.closest(".card").querySelector(".productName").innerText + "-" +e.target.closest(".card").querySelector(".productPrice").innerText;
+        cartArr.push(addedProduct);
+        sessionStorage.setItem('cart',cartArr);
         e.target.closest(".card").classList.add("selcted4Cart");
+        setTimeout(() => {e.target.closest(".card").classList.remove("selcted4Cart")}, 300);
+        
     
         
     }
-    
     const clearCart = () =>{
-        resetBoard();
+        //resetBoard();
         cartArr=[];
+        sessionStorage.clear();
        
         modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
     
@@ -150,15 +156,15 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
             src="${obj.imageUrl}">
             <div class="card-body">
             <p class="card-text">
-            ${obj.name} - ${obj.brand}<br>
-            ${obj.description}
+            <span class="productName">${obj.name}</span> - <span class="productBrand">${obj.brand}</span><br>
+            <span class="productDescription">${obj.description}</span>
             </p>
             <div
             class="d-flex justify-content-between align-items-center"
             >
             <div class="btn-group">
             <a
-            type="button" href=details.html?name=${obj.name}&brand=${obj.brand}&description=${obj.description}&price=${obj.price}&imageUrl=${obj.imageUrl}
+            type="button" href= "details.html?name=${obj.name}&brand=${obj.brand}&description=${obj.description}&price=${obj.price}&imageUrl=${obj.imageUrl}"
             class="btn btn-sm btn-outline-secondary detailBtn"
             >
             Details
@@ -170,7 +176,7 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
             +🛒
             </button>
             </div>
-            <small class="text-muted">${'$'+obj.price}</small>
+            <small class="text-muted"> <span class="productPrice">$${obj.price}</span></small>
             </div>
             </div>
             </div>
@@ -179,7 +185,7 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
         };
         const cartBtns = document.querySelectorAll(".addCart");
         const detailBtns = document.querySelectorAll(".detailBtn");
-        cartBtns.forEach(btn => btn.addEventListener("click", addToList));
+        cartBtns.forEach(btn => btn.addEventListener("click", addToCart));
         detailBtns.forEach(btn => btn.addEventListener("click", detailPage));
     }
     const enroll = () => {
@@ -215,6 +221,7 @@ window.onload = () => {
     
     
     searchButton.addEventListener("click", resetBoard);
+    viewCartButton.addEventListener("click", showCart);
 
     clearCartButton.addEventListener("click", clearCart);
     enrollBtn.addEventListener("click", enroll);
@@ -224,30 +231,6 @@ window.onload = () => {
     
 };
 
-//product model full
-//{
-//    "_id": "5d318e1a8541744830bef139", //SERVER GENERATED
-//    "name": "app test 1",  //REQUIRED
-//    "description": "somthing longer", //REQUIRED
-//    "brand": "nokia", //REQUIRED
-//    "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
-//    "price": 100, //REQUIRED
-//    "userId": "admin", //SERVER GENERATED
-//    "createdAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
-//    "updatedAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
-//    "__v": 0 //SERVER GENERATED
-//  }
-//product model user
-//{    
-//    "name": "app test 1",  //REQUIRED
-//    "description": "somthing longer", //REQUIRED
-//    "brand": "nokia", //REQUIRED
-//    "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
-//    "price": 100, //REQUIRED
-//  }
-// to get new key:
-// POST https://striveschool-api.herokuapp.com/api/account/login 
-//{ "username": "testusername@yourmail.com", "password":"pass" }
 
 
 
