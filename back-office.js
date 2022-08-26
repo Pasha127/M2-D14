@@ -5,14 +5,22 @@ const modalBody = document.querySelector("#modal div.modal-body .row");
 const cardContainerRow = cardZone.querySelector("div.row");
 const viewCartButton = document.querySelector("#viewCartButton");
 const addItemBtn = document.querySelector("#addItemButton");
+const editItemBtn = document.querySelector("#editItemButton");
+const deleteItemBtn = document.querySelector("#deleteItemButton");
 const header = document.querySelector("nav");
 const logInBtn = document.querySelector("#logInButton");
 const subAllBtn = document.querySelector("#submitButton");
+const inputId = document.querySelector('#inputId');
 const inputName = document.querySelector('#inputName');
 const inputDescription = document.querySelector('#inputDescription');
 const inputBrand = document.querySelector('#inputBrand');
 const inputImg = document.querySelector('#inputImg');
-const inputPrice = document.querySelector('#inputPrice'); 
+const inputPrice = document.querySelector('#inputPrice');
+const modifyInventoryBtn =  document.querySelector('#modifyInventoryButton');
+const enterANewProductBtn =  document.querySelector('#enterANewProductButton');
+const editAProductBtn =  document.querySelector('#editAProductButton');
+const deleteAProductBtn =  document.querySelector('#deleteAProductButton');
+
 let searchResultArr = []; 
 let productsArr = [];
 let newItem = {};
@@ -33,10 +41,12 @@ let data = [];
         
         
     }
-    const submitProduct = (e) =>{
-        const card = e.target.closest(".col-md-4");
+    const submitProduct = (input) =>{
+        if(input.target){const card = input.target.closest(".col-md-4");}
+        else{const card = input;}
+        console.log(card);  
         const postObj = {name:`${card.querySelector("span.productName").innerText}`,brand:`${card.querySelector("span.productBrand").innerText}`,description:`${card.querySelector("span.productDescription").innerText}`,imageUrl:`${card.querySelector(".card-img-top").getAttribute("src")}`,price:`${card.querySelector("span.productPrice").innerText}`};
-        fetch("https://striveschool-api.herokuapp.com/api/product/", {
+        fetch(`https://striveschool-api.herokuapp.com/api/product/`, {
             method: "POST",
             headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE0MzgwMjAsImV4cCI6MTY2MjY0NzYyMH0.FxXNN1ADQHPQJbchifn_vi_cp1sdPcdONESnfaMV4DE"}, 
             body: JSON.stringify(postObj)
@@ -51,8 +61,12 @@ let data = [];
     }
     const submitAll = ()=>{
         const activeCards = document.querySelectorAll("div.col-md-4");
-        activeCards.forEach(element => {element.remove()});
-        createAlert(`Submitted ${activeCards.length} Items`, "success" );        
+        for(element of activeCards){
+            submitProduct(element);
+            element.remove();
+        }
+        createAlert(`Submitted ${activeCards.length} Items`, "success" );
+        
     } 
     
     
@@ -93,10 +107,54 @@ let data = [];
         newItem.description=inputDescription.value
         newItem.brand=inputBrand.value
         newItem.imageUrl=inputImg.value
-        newItem.price=inputPrice.value
-        
-
+        newItem.price=inputPrice.value      
         makeCards(cardContainerRow, newItem);
+            
+
+    }
+    const addOrEdit = ()=>{
+        for(element of modalBody.querySelectorAll("input")){element.classList.add("d-none")};
+        modalBody.querySelector(".input-group").classList.add("d-none");
+        addItemBtn.classList.add("d-none");
+        editItemBtn.classList.add("d-none");
+        enterANewProductBtn.classList.remove("d-none");
+        editAProductBtn.classList.remove("d-none");
+        deleteAProductBtn.classList.remove("d-none");
+    }
+    const inventoryActionChoice = (e) =>{
+        inputId.value = "";      
+        inputName.value = "";      
+        inputDescription.value = "";
+        inputBrand.value = "";     
+        inputImg.value = "";      
+        inputPrice.value = "";  
+        enterANewProductBtn.classList.add("d-none");
+        editAProductBtn.classList.add("d-none");
+        deleteAProductBtn.classList.add("d-none");
+        switch(e.target.innerText){
+            case "Enter A New Product": 
+                addItemBtn.classList.remove("d-none");
+                //inputId.classList.remove("d-none");      
+                inputName.classList.remove("d-none");      
+                inputDescription.classList.remove("d-none");
+                inputBrand.classList.remove("d-none");     
+                inputImg.classList.remove("d-none");      
+                inputPrice.classList.remove("d-none");
+            break;
+            case "Edit A Product": 
+                editItemBtn.classList.remove("d-none");
+                inputId.classList.remove("d-none");      
+                inputName.classList.remove("d-none");      
+                inputDescription.classList.remove("d-none");
+                inputBrand.classList.remove("d-none");     
+                inputImg.classList.remove("d-none");      
+                inputPrice.classList.remove("d-none");    
+            break;
+            case "Delete A Product":
+                deleteItemBtn.classList.remove("d-none");
+                inputId.classList.remove("d-none"); 
+            
+        }
     }
 
     const makeCards = (where, obj) => {     
@@ -163,6 +221,10 @@ const createAlert = (string,color) => {
 window.onload = () => {  
     addItemBtn.addEventListener("click", addItem);   
     subAllBtn.addEventListener("click", submitAll);   
+    modifyInventoryBtn.addEventListener("click", addOrEdit);
+    enterANewProductBtn.addEventListener("click", inventoryActionChoice);
+    editAProductBtn.addEventListener("click", inventoryActionChoice);
+    deleteAProductBtn.addEventListener("click", inventoryActionChoice);
 };
 
 //product model full
