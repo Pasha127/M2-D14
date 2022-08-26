@@ -57,7 +57,19 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
 //        makeCards(modalBody, searchResultArr);    
 //        
 //    }
-    
+    const loadData = async ()=>{
+        let dataArr = [];
+        fetch("https://striveschool-api.herokuapp.com/api/product/", {
+            method: "GET",
+            headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE0MzgwMjAsImV4cCI6MTY2MjY0NzYyMH0.FxXNN1ADQHPQJbchifn_vi_cp1sdPcdONESnfaMV4DE"}})
+            .then(res => {console.log("Request complete! response:", res);
+                dataArr=res.json();
+                console.log(dataArr)
+                return dataArr}).then(data  => makeCards(cardContainerRow,data))
+            .catch(err => console.log('post failed:', err));
+          
+
+    }
     
     const changeDisplayed = () => {
         searchResultArr = [];
@@ -155,7 +167,7 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
             type="button"
             class="btn btn-sm btn-outline-secondary addCart"
             >
-            Add to Cart
+            +🛒
             </button>
             </div>
             <small class="text-muted">${'$'+obj.price}</small>
@@ -199,7 +211,7 @@ const clearInputFields = () => {
 }
 
 window.onload = () => {
-    
+    loadData();
     
     
     searchButton.addEventListener("click", resetBoard);

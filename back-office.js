@@ -34,7 +34,16 @@ let data = [];
         
     }
     const submitProduct = (e) =>{
-
+        const card = e.target.closest(".col-md-4");
+        const postObj = {name:'${card.querySelector("span.productName").innerText}',brand:`${card.querySelector("span.productBrand").innerText}`,description:`${card.querySelector("span.productDescription").innerText}`,imageUrl:`${card.querySelector(".card-img-top").getAttribute("src")}`,price:`${card.querySelector("span.productPrice").innerText}`};
+        fetch("https://striveschool-api.herokuapp.com/api/product/", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE0MzgwMjAsImV4cCI6MTY2MjY0NzYyMH0.FxXNN1ADQHPQJbchifn_vi_cp1sdPcdONESnfaMV4DE"}, 
+            body: JSON.stringify(postObj)
+          }).then(res => {
+            
+            console.log("Request complete! response:", res);
+          }).catch(err => console.log('post failed:', err));
         
             e.target.closest("div.col-md-4").remove();
             createAlert("Submitted Item", "success");
@@ -85,6 +94,7 @@ let data = [];
         newItem.brand=inputBrand.value
         newItem.imageUrl=inputImg.value
         newItem.price=inputPrice.value
+        
 
         makeCards(cardContainerRow, newItem);
     }
@@ -98,8 +108,8 @@ let data = [];
             src="${obj.imageUrl}">
             <div class="card-body">
             <p class="card-text">
-            ${obj.name} - ${obj.brand}<br>
-            ${obj.description}
+            <span class="productName">${obj.name}</span> - <span class="productBrand">${obj.brand}</span><br>
+            <span class="productDescription">${obj.description}</span>
             </p>
             <div
             class="d-flex justify-content-between align-items-center"
@@ -118,13 +128,14 @@ let data = [];
             Submit
             </button>
             </div>
-            <small class="text-muted">${'$'+obj.price}</small>
+            <small class="text-muted"$> <span class="productPrice">${obj.price}</span></small>
             </div>
             </div>
             </div>
             </div>`
             where.append(newCard);
             createAlert(`Added ${obj.brand} ${obj.name}`,"success");
+            
         
         const subBtn = newCard.querySelector(".submitProduct");
         const skipBtn = newCard.querySelector(".skipBtn");
