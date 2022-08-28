@@ -13,7 +13,8 @@ const header = document.querySelector("nav");
 const logInBtn = document.querySelector("#logInButton");
 
 let searchResultArr = []; 
-let cartArr = sessionStorage.cart.split(",");
+let cartArr = [];
+if(sessionStorage.cart){let cartArr = sessionStorage.cart.split(",");}
 let catalog = {};
 let data = [];
 
@@ -34,34 +35,35 @@ let data = [];
             modalBody.append(newP);
         })   
     }
-    const clearCart = () =>{
-        //resetBoard();
+    const clearCart = () =>{        
         cartArr=[];
-        sessionStorage.clear();
-       
+        sessionStorage.clear();       
         modal.querySelector("div.modal-header").innerText  = `Your Cart has ${cartArr.length} items.`;
-    
         for(card of modalBody.querySelectorAll("*")){
             card.remove();
         }
     }    
     
-    const makeCards = () => {
-        
-            
+    const makeCards = () => {  
             const newCard = document.createElement("div");
             newCard.innerHTML = `<div class="card mb-4 shadow-sm" style="width: 80vw;">
             <img class="card-img-top"
             src="${urlParams.get('imageUrl')}">
             <div class="card-body">
-            <p class="card-text">
-            ${urlParams.get('name')} - ${urlParams.get('brand')}<br>
-            ${urlParams.get('description')}
+            <p class="card-text"> 
+            <span class="productName"> ${urlParams.get('name')}</span> - <span class="productBrand">${urlParams.get('brand')}</span><br>
+            <span class="productDescription">${urlParams.get('description')}</span>
             </p>
             <div
             class="d-flex justify-content-between align-items-center"
-            >                
-            <small class="text-muted">${'$'+ urlParams.get('price')}</small>
+            >
+            <button
+            type="button"
+            class="btn btn-sm btn-outline-secondary addCart"
+            >
+            +🛒
+            </button>
+            <small class="text-muted"><span class="productPrice">${'$'+ urlParams.get('price')}</span></small>
             </div>
             </div>
             </div>
@@ -98,16 +100,24 @@ const clearInputFields = () => {
     userInput.classList.remove("is-invalid");
             inputPassword.classList.remove("is-invalid");
 }
+const addToCart = (e) => {
+    const addedProduct = e.target.closest(".card").querySelector(".productName").innerText + "-" +e.target.closest(".card").querySelector(".productPrice").innerText;
+    cartArr.push(addedProduct);
+    sessionStorage.setItem('cart',cartArr);
+    e.target.closest(".card").classList.add("selcted4Cart");
+    setTimeout(() => {e.target.closest(".card").classList.remove("selcted4Cart")}, 300);
+    
 
+    
+}
 window.onload = () => {
     makeCards();
     viewCartButton.addEventListener("click", showCart);
     clearCartButton.addEventListener("click", clearCart);
     enrollBtn.addEventListener("click", enroll);
     logInBtn.addEventListener("click", clearInputFields);
-
-    
-    
+    const cartBtn = document.querySelector(".addCart");
+    cartBtn.addEventListener("click", addToCart); 
 };
 
 
