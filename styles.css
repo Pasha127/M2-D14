@@ -58,6 +58,16 @@
         top: 80px;
         z-index: 9999;
       }
+      .inventoryItem{
+        border: 1px solid black;
+        border-radius: 4px;
+      }
+      .inventoryItem:hover{
+        cursor: pointer;
+      }
+      .selectedItem{
+        background-color: rgb(230, 134, 134);
+      }
       @media (max-width: 410px) {
         .jumbotron-heading{
           display: none;

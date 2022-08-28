@@ -161,9 +161,34 @@ let data = [];
     const showInventory = (data)=>{
         for(element of data){
             const newLine = document.createElement("p");
-            newLine.innerText =`${element.name} - ID: ${element._id} `;
+            newLine.innerHTML =`<span class="inventoryName">${element.name}</span> - ID: <span class="inventoryId">${element._id} </span>`;
             inventory.append(newLine);
+            newLine.addEventListener("click", copyId);
+            newLine.classList.add("inventoryItem");            
         } 
+    }
+    const copyId = (e)=>{
+        const selected = e.target.closest(".inventoryItem");
+        const idValue = selected.querySelector(".inventoryId").innerText;
+        inputId.value = idValue;
+        for(item of document.querySelectorAll(".inventoryItem")){item.classList.remove("selectedItem")}
+        selected.classList.add("selectedItem");
+        fetch(`https://striveschool-api.herokuapp.com/api/product/${idValue}`, {
+            method: "GET",
+            headers: {"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}})
+            .then(res => {console.log("Request complete! response:", res);
+                dataArr=res.json();
+                console.log(dataArr)
+                return dataArr}).then(data  => {
+                    inputId.value = idValue;      
+                    inputName.value = data.name;      
+                    inputDescription.value = data.description;
+                    inputBrand.value = data.brand;     
+                    inputImg.value = data.imageUrl;      
+                    inputPrice.value = data.price;  
+                })
+            .catch(err => console.log('post failed:', err));
+
     }
     const eraseInventory = ()=>{
         for(garbage of inventory.querySelectorAll("*")){
@@ -189,7 +214,8 @@ let data = [];
                 inputBrand.classList.remove("d-none");     
                 inputImg.classList.remove("d-none");      
                 inputPrice.classList.remove("d-none");
-                modalBody.querySelector(".input-group").classList.remove("d-none");    
+                modalBody.querySelector(".input-group").classList.remove("d-none");
+                for(item of document.querySelectorAll(".inventoryItem")){item.classList.remove("inventoryItem")}    
             break;
             case "Edit A Product": 
                 editItemBtn.classList.remove("d-none");
