@@ -21,7 +21,7 @@ const enterANewProductBtn =  document.querySelector('#enterANewProductButton');
 const editAProductBtn =  document.querySelector('#editAProductButton');
 const deleteAProductBtn =  document.querySelector('#deleteAProductButton');
 const inventory = document.querySelector('.inventory');
-
+let selectedId = "";
 let searchResultArr = []; 
 let productsArr = [];
 let newItem = {};
@@ -50,7 +50,7 @@ let data = [];
         const postObj = {name:`${card.querySelector("span.productName").innerText}`,brand:`${card.querySelector("span.productBrand").innerText}`,description:`${card.querySelector("span.productDescription").innerText}`,imageUrl:`${card.querySelector(".card-img-top").getAttribute("src")}`,price:`${card.querySelector("span.productPrice").innerText}`};
         fetch(`https://striveschool-api.herokuapp.com/api/product/`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE0MzgwMjAsImV4cCI6MTY2MjY0NzYyMH0.FxXNN1ADQHPQJbchifn_vi_cp1sdPcdONESnfaMV4DE"}, 
+            headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}, 
             body: JSON.stringify(postObj)
           }).then(res => {
             
@@ -59,6 +59,17 @@ let data = [];
         
             card.remove();
             createAlert("Submitted Item", "success");
+        
+    }
+    const deleteProduct = async (input) =>{               
+        
+        fetch(`https://striveschool-api.herokuapp.com/api/product/${inputId.value}`, {
+            method: "DEL",
+            headers: {"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}
+          }).then(res => {            
+            console.log("Request complete! response:", res);
+          }).catch(err => console.log('post failed:', err));           
+            createAlert("Deleted Item", "success");
         
     }
     const submitAll = ()=>{
@@ -245,6 +256,8 @@ const createAlert = (string,color) => {
 
 window.onload = () => {  
     addItemBtn.addEventListener("click", addItem);   
+    deleteItemBtn.addEventListener("click", deleteProduct);   
+    //editItemBtn.addEventListener("click", editProduct);   
     subAllBtn.addEventListener("click", submitAll);   
     modifyInventoryBtn.addEventListener("click", addOrEdit);
     enterANewProductBtn.addEventListener("click", inventoryActionChoice);
