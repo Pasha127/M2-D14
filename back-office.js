@@ -53,12 +53,27 @@ let data = [];
             headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}, 
             body: JSON.stringify(postObj)
           }).then(res => {
-            
+            if(!res.ok){createAlert(`Item Not Submitted`, "danger")}else{createAlert("Submitted Item", "success");};
             console.log("Request complete! response:", res);
-          }).catch(err => console.log('post failed:', err));
+          }).catch(err => createAlert(`Item Not Uploaded - ${err}`, "danger"));
         
             card.remove();
-            createAlert("Submitted Item", "success");
+            
+        
+    }
+    const editProduct = async (input) =>{
+        let card = null;
+        console.log("submit input", input);
+        const postObj = {name:`${inputName.value}`,brand:`${inputBrand.value}`,description:`${inputDescription.value}`,imageUrl:`${inputImg.value}`,price:`${inputPrice.value}`};
+        fetch(`https://striveschool-api.herokuapp.com/api/product/${inputId.value}`, {
+            method: "PUT",
+            headers: {'Content-Type': 'application/json',"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}, 
+            body: JSON.stringify(postObj)
+          }).then(res => {            
+            console.log("Request complete! response:", res);
+            if(!res.ok){createAlert(`Item Not Edited`, "danger")}else{createAlert("Edited Item", "success");};
+        }).catch(err => createAlert(`Item Not Edited - ${err}`, "danger"));
+            
         
     }
     const deleteProduct = async (input) =>{               
@@ -68,8 +83,8 @@ let data = [];
             headers: {"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}
           }).then(res => {            
             console.log("Request complete! response:", res);
-          }).catch(err => console.log('post failed:', err));           
-            createAlert("Deleted Item", "success");
+            if(!res.ok){createAlert(`Item Not Deleted`, "danger")}else{createAlert("Deleted Item", "success");};
+        }).catch(err => createAlert(`Item Not Deleted - ${err}`, "danger"));           
         
     }
     const submitAll = ()=>{
@@ -257,7 +272,7 @@ const createAlert = (string,color) => {
 window.onload = () => {  
     addItemBtn.addEventListener("click", addItem);   
     deleteItemBtn.addEventListener("click", deleteProduct);   
-    //editItemBtn.addEventListener("click", editProduct);   
+    editItemBtn.addEventListener("click", editProduct);   
     subAllBtn.addEventListener("click", submitAll);   
     modifyInventoryBtn.addEventListener("click", addOrEdit);
     enterANewProductBtn.addEventListener("click", inventoryActionChoice);
