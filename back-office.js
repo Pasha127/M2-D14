@@ -43,9 +43,10 @@ let data = [];
         
     }
     const submitProduct = async (input) =>{
-        console.log(input);
-        if(awaitinput.target){const card = input.target.closest(".col-md-4");}
-        else{const card = input;}        ;  
+        let card = null;
+        console.log("submit input", input);        
+        if(input.target){card = input.target.closest(".col-md-4");}
+        else{card = input;}        ;  
         const postObj = {name:`${card.querySelector("span.productName").innerText}`,brand:`${card.querySelector("span.productBrand").innerText}`,description:`${card.querySelector("span.productDescription").innerText}`,imageUrl:`${card.querySelector(".card-img-top").getAttribute("src")}`,price:`${card.querySelector("span.productPrice").innerText}`};
         fetch(`https://striveschool-api.herokuapp.com/api/product/`, {
             method: "POST",
@@ -56,13 +57,14 @@ let data = [];
             console.log("Request complete! response:", res);
           }).catch(err => console.log('post failed:', err));
         
-            e.target.closest("div.col-md-4").remove();
+            card.remove();
             createAlert("Submitted Item", "success");
         
     }
     const submitAll = ()=>{
         const activeCards = document.querySelectorAll("div.col-md-4");
         for(element of activeCards){
+            console.log("submission loop element",element);
             submitProduct(element);
             element.remove();
         }
