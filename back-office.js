@@ -64,7 +64,7 @@ let data = [];
     const deleteProduct = async (input) =>{               
         
         fetch(`https://striveschool-api.herokuapp.com/api/product/${inputId.value}`, {
-            method: "DEL",
+            method: "DELETE",
             headers: {"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}
           }).then(res => {            
             console.log("Request complete! response:", res);
