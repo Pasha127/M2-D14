@@ -58,3 +58,18 @@
         top: 80px;
         z-index: 9999;
       }
+      @media (max-width: 410px) {
+        .jumbotron-heading{
+          display: none;
+          position: absolute;
+        }
+        .jumbotron .btn{
+          transform: translateY(-80px);
+          margin-bottom: 10px;
+        }
+        .jumbotron .container.mt-5{
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+      }
