@@ -42,7 +42,25 @@ let data = [];
         
         
     }
-    const submitProduct = async (input) =>{
+
+    const fieldsFilled = () => {
+        if(      
+            inputName.value !== "" &&      
+            inputDescription.value !== "" &&
+            inputBrand.value !== "" &&     
+            inputImg.value  !== "" &&      
+            inputPrice.value !== ""   
+        ){return true}
+    }
+    
+    const invalidateFields = () =>{
+        for(field of document.querySelectorAll("input")){field.classList.add("is-invalid");};
+    }
+    const validateFields = () =>{
+        for(field of document.querySelectorAll("input")){field.classList.remove("is-invalid");};
+    }
+
+    const submitProduct = async (input) =>{       
         let card = null;
         console.log("submit input", input);        
         if(input.target){card = input.target.closest(".col-md-4");}
@@ -56,14 +74,16 @@ let data = [];
             if(!res.ok){createAlert(`Item Not Submitted`, "danger")}else{createAlert("Submitted Item", "success");};
             console.log("Request complete! response:", res);
           }).catch(err => createAlert(`Item Not Uploaded - ${err}`, "danger"));
-        
             card.remove();
             
         
     }
     const editProduct = async (input) =>{
-        let card = null;
-        console.log("submit input", input);
+        if(fieldsFilled()){
+            validateFields();
+        if(idMatchCheck()){
+
+        inputId.classList.remove("is-invalid");
         const postObj = {name:`${inputName.value}`,brand:`${inputBrand.value}`,description:`${inputDescription.value}`,imageUrl:`${inputImg.value}`,price:`${inputPrice.value}`};
         fetch(`https://striveschool-api.herokuapp.com/api/product/${inputId.value}`, {
             method: "PUT",
@@ -73,11 +93,17 @@ let data = [];
             console.log("Request complete! response:", res);
             if(!res.ok){createAlert(`Item Not Edited`, "danger")}else{createAlert("Edited Item", "success");};
         }).catch(err => createAlert(`Item Not Edited - ${err}`, "danger"));
-            
-        
+        $('#modal').modal('hide');
+    }else{inputId.classList.add("is-invalid");
+        createAlert(`Not a Valid ID`, "danger")
+    }  
+    }else{createAlert(`All Fields Required`, "danger");
+    invalidateFields();
+};    
     }
     const deleteProduct = async (input) =>{               
-        
+        if(idMatchCheck()){
+            inputId.classList.remove("is-invalid");
         fetch(`https://striveschool-api.herokuapp.com/api/product/${inputId.value}`, {
             method: "DELETE",
             headers: {"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA3ODg0NDFlYjc2ZDAwMTUxNTAxZjgiLCJpYXQiOjE2NjE3MTE5MzEsImV4cCI6MTY2MjkyMTUzMX0.POicuDG7JzC4m-uBLepp5cyhmtauXrdmnE9e4Tg7OTo"}
@@ -85,7 +111,10 @@ let data = [];
             console.log("Request complete! response:", res);
             if(!res.ok){createAlert(`Item Not Deleted`, "danger")}else{createAlert("Deleted Item", "success");};
         }).catch(err => createAlert(`Item Not Deleted - ${err}`, "danger"));           
-        
+        $('#modal').modal('hide');
+    }else{inputId.classList.add("is-invalid");
+        createAlert(`Not a Valid ID`, "danger")
+    }  
     }
     const submitAll = ()=>{
         const activeCards = document.querySelectorAll("div.col-md-4");
@@ -128,20 +157,33 @@ let data = [];
    
     const skip = (e) => {
         e.target.closest("div.col-md-4").remove();
-        createAlert("Deleted Item", "danger");
+        createAlert("Deleted Item", "success");
     }
     
     const addItem = () => {
+        if(fieldsFilled()){
+            validateFields()
         newItem.name=inputName.value
         newItem.description=inputDescription.value
         newItem.brand=inputBrand.value
         newItem.imageUrl=inputImg.value
         newItem.price=inputPrice.value      
-        makeCards(cardContainerRow, newItem);
-            
-
+        makeCards(cardContainerRow, newItem); 
+        $('#modal').modal('hide');
+        }else{
+            invalidateFields();
+            createAlert("All Fields Required", "danger");
+        }; 
     }
+
+    const idMatchCheck = () => {
+        for(item of document.querySelectorAll(".inventoryId")){if(item.innerText === inputId.value){
+            return true;
+        }}
+    }
+
     const addOrEdit = ()=>{
+        validateFields();
         eraseInventory();
         for(element of modalBody.querySelectorAll("input")){element.classList.add("d-none")};
         modalBody.querySelector(".input-group").classList.add("d-none");

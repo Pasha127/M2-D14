@@ -11,6 +11,7 @@ const viewCartButton = document.querySelector("#viewCartButton");
 const clearCartButton = document.querySelector("#clearCartButton");
 const header = document.querySelector("nav");
 const logInBtn = document.querySelector("#logInButton");
+const bodySpinner = document.querySelector("#bodySpinner");
 let query = searchField.value;
 let searchResultArr = []; 
 let cartArr = [];
@@ -147,6 +148,7 @@ const testObj = {name: 'tv',brand:'sony',description:'large',imageUrl:'https://w
     }
     
     const makeCards = (where, array1) => {
+        bodySpinner.classList.add("d-none");
         for(let i=0;i<array1.length;i++){
             const obj = array1[i];
             const newCard = document.createElement("div");
